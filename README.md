@@ -34,8 +34,63 @@ import { Controller, Get } from 'RuServer';
 @Controller()
 export class HelloWorld {
     @Get('hello', 'Hello World')
-    getTest() {
+    // Não é obrigatorio passar o parametro do Request Data, só se for usar
+     getTest(reqData: RequestData) {
+        if (reqData.query.name) {
+            return `Hello ${reqData.query.name}!`;
+        }
+
         return 'Hello!';
+    }
+
+    // GET /hello/{NAME}
+    @Get('hello/:name', 'Hello World')
+    getTestParams(reqData: RequestData) {
+        return `Hello ${reqData.params.name}!`;
+    }
+
+    // POSTs com e sem body data
+    @Post('hello', 'Hello World')
+    postTest() {
+        return 'Hello Post!';
+    }
+
+    @Post('hello/data', 'Hello World')
+    postTestData(reqData: RequestData) {
+        return `Hello ${reqData.body.name}!`;
+    }
+
+    // PUTs com e sem body data
+    @Put('hello', 'Hello World')
+    putTest() {
+        return 'Hello Put!';
+    }
+
+    @Put('hello/data', 'Hello World')
+    putTestData(reqData: RequestData) {
+        return `Hello ${reqData.body.name}!`;
+    }
+
+    // DELETEs com e sem body data
+    @Delete('hello', 'Hello World')
+    deleteTest() {
+        return 'Hello Delete!';
+    }
+
+    @Delete('hello/data', 'Hello World')
+    deleteTestData(reqData: RequestData) {
+        return `Hello ${reqData.body.name}!`;
+    }
+
+    // PATCHs com e sem body data
+    @Patch('hello', 'Hello World')
+    patchTest() {
+        return 'Hello Patch!';
+    }
+
+    @Patch('hello/data', 'Hello World')
+    patchTestData(reqData: RequestData) {
+        return `Hello ${reqData.body.name}!`;
     }
 }
 ```
