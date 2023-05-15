@@ -1,4 +1,4 @@
-import { Controller, Get, Post, RequestData } from '..';
+import { Controller, Get, Post, RequestData, Delete, Put, Patch } from '..';
 
 @Controller()
 export class HelloWorld {
@@ -28,5 +28,20 @@ export class HelloWorld {
     @Post('hello/data', 'Hello World')
     postTestData(reqData: RequestData) {
         return `Hello ${reqData.body.name}!`;
+    }
+
+    @Delete('hello', 'DELETE Hello World')
+    deleteData() {
+        return 'Hello Delete!';
+    }
+
+    @Put('hello', 'PUT Hello World')
+    asdf() {
+        return 'Hello Put!';
+    }
+
+    @Patch('hello', 'PATCH Hello World')
+    patchData() {
+        return 'Hello Patch!';
     }
 }
