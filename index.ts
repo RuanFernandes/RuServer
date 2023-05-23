@@ -101,7 +101,7 @@ type RouteType = {
  * server.start();
  * @author Ruan Fernandes
  */
-export default class RuServer {
+class RuServer {
     private app: Express;
     private routes: RouteType[];
 
