@@ -2,3 +2,4 @@
 .prettierrc
 main.ts
 npm_package_release/ruserver/dist/
+npm_package_release/testing/
