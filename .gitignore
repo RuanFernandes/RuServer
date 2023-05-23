@@ -1,6 +1,4 @@
 **/node_modules
 .prettierrc
-examples/
-*.js
 main.ts
-HelloWorld.ts
+npm_package_release/ruserver/dist/
