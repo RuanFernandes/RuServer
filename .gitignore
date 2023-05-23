@@ -2,4 +2,6 @@
 .prettierrc
 main.ts
 npm_package_release/ruserver/dist/
-npm_package_release/testing/
+npm_package_release/testing/node_modules
+npm_package_release/testing/package-lock.json
+npm_package_release/testing/dist/
