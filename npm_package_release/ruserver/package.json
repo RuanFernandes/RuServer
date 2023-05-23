@@ -1,13 +1,27 @@
 {
     "name": "ruserver",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "files": [
         "/dist"
     ],
-    "keywords": [],
+    "keywords": [
+        "express",
+        "api",
+        "typescript",
+        "controllers",
+        "decorators",
+        "routing-controllers",
+        "routing",
+        "rest",
+        "restful",
+        "restful-api",
+        "rest-api",
+        "http",
+        "http-server"
+    ],
     "author": "Ruan Fernandes Guimaraes",
     "license": "ISC",
     "devDependencies": {
