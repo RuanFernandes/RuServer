@@ -399,7 +399,7 @@ class RuServer {
     }
 }
 
-function Get(path: string, description: string = '') {
+export function Get(path: string, description: string = '') {
     return function (target: any, propertyKey: string) {
         const getRoutes =
             Reflect.getMetadata(GET_METADATA_KEY, target.constructor) || [];
@@ -431,7 +431,7 @@ function Get(path: string, description: string = '') {
     };
 }
 
-function Post(path: string, description: string = '') {
+export function Post(path: string, description: string = '') {
     return function (target: any, propertyKey: string) {
         const postRoutes =
             Reflect.getMetadata(POST_METADATA_KEY, target.constructor) || [];
@@ -463,107 +463,11 @@ function Post(path: string, description: string = '') {
     };
 }
 
-function Delete(path: string, description: string = '') {
-    return function (target: any, propertyKey: string) {
-        const deleteRoutes =
-            Reflect.getMetadata(DELETE_METADATA_KEY, target.constructor) || [];
-        const route: RouteInterface = {
-            path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
-            description: description,
-            method: 'DELETE',
-        };
-        Reflect.defineMetadata(
-            DELETE_METADATA_KEY,
-            [...deleteRoutes, route],
-            target.constructor
-        );
-
-        const metadata =
-            Reflect.getMetadata(
-                DELETE_METADATA_KEY,
-                target.constructor,
-                propertyKey
-            ) || [];
-        metadata.push({ type: 'DELETE', path, description });
-        Reflect.defineMetadata(
-            DELETE_METADATA_KEY,
-            metadata,
-            target.constructor,
-            propertyKey
-        );
-    };
-}
-
-function Put(path: string, description: string = '') {
-    return function (target: any, propertyKey: string) {
-        const putRoutes =
-            Reflect.getMetadata(PUT_METADATA_KEY, target.constructor) || [];
-        const route: RouteInterface = {
-            path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
-            description: description,
-            method: 'PUT',
-        };
-        Reflect.defineMetadata(
-            PUT_METADATA_KEY,
-            [...putRoutes, route],
-            target.constructor
-        );
-
-        const metadata =
-            Reflect.getMetadata(
-                PUT_METADATA_KEY,
-                target.constructor,
-                propertyKey
-            ) || [];
-        metadata.push({ type: 'PUT', path, description });
-        Reflect.defineMetadata(
-            PUT_METADATA_KEY,
-            metadata,
-            target.constructor,
-            propertyKey
-        );
-    };
-}
-
-function Patch(path: string, description: string = '') {
-    return function (target: any, propertyKey: string) {
-        const patchRoutes =
-            Reflect.getMetadata(PATCH_METADATA_KEY, target.constructor) || [];
-        const route: RouteInterface = {
-            path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
-            description: description,
-            method: 'PATCH',
-        };
-        Reflect.defineMetadata(
-            PATCH_METADATA_KEY,
-            [...patchRoutes, route],
-            target.constructor
-        );
-
-        const metadata =
-            Reflect.getMetadata(
-                PATCH_METADATA_KEY,
-                target.constructor,
-                propertyKey
-            ) || [];
-        metadata.push({ type: 'PATCH', path, description });
-        Reflect.defineMetadata(
-            PATCH_METADATA_KEY,
-            metadata,
-            target.constructor,
-            propertyKey
-        );
-    };
-}
-
 class Controlador {
     constructor() {}
 }
 
-function Controller() {
+export function Controller() {
     return function (constructor: Function) {
         Object.setPrototypeOf(constructor.prototype, new Controlador());
     };
@@ -575,10 +479,4 @@ export {
     RuServer,
     RouteInterface,
     RequestData,
-    Controller,
-    Get,
-    Post,
-    Delete,
-    Put,
-    Patch,
 };

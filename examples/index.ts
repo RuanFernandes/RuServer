@@ -1,5 +1,5 @@
 import { HelloWorld } from './HelloWorld';
-import { RuServer } from '..';
+import { RuServer } from '../index';
 
 const server = new RuServer(3000);
 
