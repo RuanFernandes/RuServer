@@ -1,4 +1,4 @@
-import { Controller, Get, RequestData, RuServer, Logger } from 'ruserver';
+import { Controller, Get, RequestData, RuServer, Logger, Post } from 'ruserver';
 
 const server = new RuServer();
 
