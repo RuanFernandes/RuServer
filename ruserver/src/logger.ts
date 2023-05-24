@@ -2,8 +2,9 @@ import * as winston from 'winston';
 
 export default class Logger {
     private _logger: winston.Logger;
+    private prefix: string = 'RuServer';
 
-    constructor() {
+    constructor(prefix: string = 'RuServer') {
         this._logger = winston.createLogger({
             level: 'debug',
             format: winston.format.combine(
@@ -27,8 +28,8 @@ export default class Logger {
                 new winston.transports.File({ filename: 'logs/general.log' }),
             ],
         });
-
-        this._logger.info('Logger initialized');
+        this.prefix = prefix;
+        this._logger.info('[' + this.prefix + '] Logger initialized');
     }
 
     public error(message: string): void {

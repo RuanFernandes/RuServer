@@ -139,152 +139,60 @@ class RuServer {
         });
     }
 
-    /**
-     *
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo GET
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    private addGetRoute(path: string, callback: Function, description: string) {
-        const existingRoute = this.routes.find((route) => {
-            return route.path === path && route.method === 'GET';
-        });
-
-        if (existingRoute) {
-            throw new Error(`Route GET/${existingRoute.path} already exists.`);
-        }
-
-        this.app.get(path, (req, res) => {
-            const data = callback(req, this.logger);
-            res.send(data);
-        });
-
-        this.routes.push({
-            method: 'GET',
-            path: path,
-            description: description,
-        });
-    }
-
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo POST
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    private addPostRoute(
+    private addRoute(
+        method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
         path: string,
         callback: Function,
         description: string
     ) {
         const existingRoute = this.routes.find((route) => {
-            return route.path === path && route.method === 'POST';
-        });
-
-        if (existingRoute) {
-            throw new Error(`Route POST/${existingRoute.path} already exists.`);
-        }
-
-        this.app.post(path, (req, res) => {
-            const data = callback(req, this.logger);
-            res.send(data);
-        });
-
-        this.routes.push({
-            method: 'POST',
-            path: path,
-            description: description,
-        });
-    }
-
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo PUT
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    private addPutRoute(path: string, callback: Function, description: string) {
-        const existingRoute = this.routes.find((route) => {
-            return route.path === path && route.method === 'PUT';
-        });
-
-        if (existingRoute) {
-            throw new Error(`Route PUT/${existingRoute.path} already exists.`);
-        }
-
-        this.app.put(path, (req, res) => {
-            const data = callback(req, this.logger);
-            res.send(data);
-        });
-
-        this.routes.push({
-            method: 'PUT',
-            path: path,
-            description: description,
-        });
-    }
-
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo DELETE
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    private addDeleteRoute(
-        path: string,
-        callback: Function,
-        description: string
-    ) {
-        const existingRoute = this.routes.find((route) => {
-            return route.path === path && route.method === 'DELETE';
+            return route.path === path && route.method === method;
         });
 
         if (existingRoute) {
             throw new Error(
-                `Route DELETE/${existingRoute.path} already exists.`
+                `Route ${method}/${existingRoute.path} already exists.`
             );
         }
 
-        this.app.delete(path, (req, res) => {
-            const data = callback(req, this.logger);
-            res.send(data);
-        });
+        //TODO: adicionar no tipo do req um valor para status code
+        switch (method) {
+            case 'GET':
+                this.app.get(path, (req, res) => {
+                    const data = callback(req, this.logger);
+                    res.send(data);
+                });
+                break;
+            case 'POST':
+                this.app.post(path, (req, res) => {
+                    const data = callback(req, this.logger);
+                    res.send(data);
+                });
+                break;
+            case 'PUT':
+                this.app.put(path, (req, res) => {
+                    const data = callback(req, this.logger);
+                    res.send(data);
+                });
+                break;
 
-        this.routes.push({
-            method: 'DELETE',
-            path: path,
-            description: description,
-        });
-    }
+            case 'DELETE':
+                this.app.delete(path, (req, res) => {
+                    const data = callback(req, this.logger);
+                    res.send(data);
+                });
+                break;
 
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo PATCH
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    private addPatchRoute(
-        path: string,
-        callback: Function,
-        description: string
-    ) {
-        const existingRoute = this.routes.find((route) => {
-            return route.path === path && route.method === 'PATCH';
-        });
-
-        if (existingRoute) {
-            throw new Error(
-                `Route PATCH/${existingRoute.path} already exists.`
-            );
+            case 'PATCH':
+                this.app.patch(path, (req, res) => {
+                    const data = callback(req, this.logger);
+                    res.send(data);
+                });
+                break;
         }
-        this.app.patch(path, (req, res) => {
-            const data = callback(req, this.logger);
-            res.send(data);
-        });
 
         this.routes.push({
-            method: 'PATCH',
+            method: method,
             path: path,
             description: description,
         });
@@ -345,7 +253,8 @@ class RuServer {
             const getRoutes = Reflect.getMetadata(GET_METADATA_KEY, element);
             if (getRoutes) {
                 getRoutes.forEach((route: RouteInterface) => {
-                    this.addGetRoute(
+                    this.addRoute(
+                        'GET',
                         route.path,
                         route.callback,
                         route.description || ''
@@ -357,7 +266,8 @@ class RuServer {
             const postRoutes = Reflect.getMetadata(POST_METADATA_KEY, element);
             if (postRoutes) {
                 postRoutes.forEach((route: RouteInterface) => {
-                    this.addPostRoute(
+                    this.addRoute(
+                        'POST',
                         route.path,
                         route.callback,
                         route.description || ''
@@ -369,7 +279,8 @@ class RuServer {
             const putRoutes = Reflect.getMetadata(PUT_METADATA_KEY, element);
             if (putRoutes) {
                 putRoutes.forEach((route: RouteInterface) => {
-                    this.addPutRoute(
+                    this.addRoute(
+                        'PUT',
                         route.path,
                         route.callback,
                         route.description || ''
@@ -384,7 +295,8 @@ class RuServer {
             );
             if (deleteRoutes) {
                 deleteRoutes.forEach((route: RouteInterface) => {
-                    this.addDeleteRoute(
+                    this.addRoute(
+                        'DELETE',
                         route.path,
                         route.callback,
                         route.description || ''
@@ -399,7 +311,8 @@ class RuServer {
             );
             if (patchRoutes) {
                 patchRoutes.forEach((route: RouteInterface) => {
-                    this.addPatchRoute(
+                    this.addRoute(
+                        'PATCH',
                         route.path,
                         route.callback,
                         route.description || ''

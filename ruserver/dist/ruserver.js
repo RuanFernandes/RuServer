@@ -52,118 +52,48 @@ class RuServer {
             console.log('Server running on port ' + this.port);
         });
     }
-    /**
-     *
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo GET
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    addGetRoute(path, callback, description) {
+    addRoute(method, path, callback, description) {
         const existingRoute = this.routes.find((route) => {
-            return route.path === path && route.method === 'GET';
+            return route.path === path && route.method === method;
         });
         if (existingRoute) {
-            throw new Error(`Route GET/${existingRoute.path} already exists.`);
+            throw new Error(`Route ${method}/${existingRoute.path} already exists.`);
         }
-        this.app.get(path, (req, res) => {
-            const data = callback(req, this.logger);
-            res.send(data);
-        });
-        this.routes.push({
-            method: 'GET',
-            path: path,
-            description: description,
-        });
-    }
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo POST
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    addPostRoute(path, callback, description) {
-        const existingRoute = this.routes.find((route) => {
-            return route.path === path && route.method === 'POST';
-        });
-        if (existingRoute) {
-            throw new Error(`Route POST/${existingRoute.path} already exists.`);
+        //TODO: adicionar no tipo do req um valor para status code
+        switch (method) {
+            case 'GET':
+                this.app.get(path, (req, res) => {
+                    const data = callback(req, this.logger);
+                    res.send(data);
+                });
+                break;
+            case 'POST':
+                this.app.post(path, (req, res) => {
+                    const data = callback(req, this.logger);
+                    res.send(data);
+                });
+                break;
+            case 'PUT':
+                this.app.put(path, (req, res) => {
+                    const data = callback(req, this.logger);
+                    res.send(data);
+                });
+                break;
+            case 'DELETE':
+                this.app.delete(path, (req, res) => {
+                    const data = callback(req, this.logger);
+                    res.send(data);
+                });
+                break;
+            case 'PATCH':
+                this.app.patch(path, (req, res) => {
+                    const data = callback(req, this.logger);
+                    res.send(data);
+                });
+                break;
         }
-        this.app.post(path, (req, res) => {
-            const data = callback(req, this.logger);
-            res.send(data);
-        });
         this.routes.push({
-            method: 'POST',
-            path: path,
-            description: description,
-        });
-    }
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo PUT
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    addPutRoute(path, callback, description) {
-        const existingRoute = this.routes.find((route) => {
-            return route.path === path && route.method === 'PUT';
-        });
-        if (existingRoute) {
-            throw new Error(`Route PUT/${existingRoute.path} already exists.`);
-        }
-        this.app.put(path, (req, res) => {
-            const data = callback(req, this.logger);
-            res.send(data);
-        });
-        this.routes.push({
-            method: 'PUT',
-            path: path,
-            description: description,
-        });
-    }
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo DELETE
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    addDeleteRoute(path, callback, description) {
-        const existingRoute = this.routes.find((route) => {
-            return route.path === path && route.method === 'DELETE';
-        });
-        if (existingRoute) {
-            throw new Error(`Route DELETE/${existingRoute.path} already exists.`);
-        }
-        this.app.delete(path, (req, res) => {
-            const data = callback(req, this.logger);
-            res.send(data);
-        });
-        this.routes.push({
-            method: 'DELETE',
-            path: path,
-            description: description,
-        });
-    }
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo PATCH
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    addPatchRoute(path, callback, description) {
-        const existingRoute = this.routes.find((route) => {
-            return route.path === path && route.method === 'PATCH';
-        });
-        if (existingRoute) {
-            throw new Error(`Route PATCH/${existingRoute.path} already exists.`);
-        }
-        this.app.patch(path, (req, res) => {
-            const data = callback(req, this.logger);
-            res.send(data);
-        });
-        this.routes.push({
-            method: 'PATCH',
+            method: method,
             path: path,
             description: description,
         });
@@ -214,35 +144,35 @@ class RuServer {
             const getRoutes = Reflect.getMetadata(GET_METADATA_KEY, element);
             if (getRoutes) {
                 getRoutes.forEach((route) => {
-                    this.addGetRoute(route.path, route.callback, route.description || '');
+                    this.addRoute('GET', route.path, route.callback, route.description || '');
                 });
             }
             // Post Routes
             const postRoutes = Reflect.getMetadata(POST_METADATA_KEY, element);
             if (postRoutes) {
                 postRoutes.forEach((route) => {
-                    this.addPostRoute(route.path, route.callback, route.description || '');
+                    this.addRoute('POST', route.path, route.callback, route.description || '');
                 });
             }
             // Put Routes
             const putRoutes = Reflect.getMetadata(PUT_METADATA_KEY, element);
             if (putRoutes) {
                 putRoutes.forEach((route) => {
-                    this.addPutRoute(route.path, route.callback, route.description || '');
+                    this.addRoute('PUT', route.path, route.callback, route.description || '');
                 });
             }
             // Delete Routes
             const deleteRoutes = Reflect.getMetadata(DELETE_METADATA_KEY, element);
             if (deleteRoutes) {
                 deleteRoutes.forEach((route) => {
-                    this.addDeleteRoute(route.path, route.callback, route.description || '');
+                    this.addRoute('DELETE', route.path, route.callback, route.description || '');
                 });
             }
             // Patch Routes
             const patchRoutes = Reflect.getMetadata(PATCH_METADATA_KEY, element);
             if (patchRoutes) {
                 patchRoutes.forEach((route) => {
-                    this.addPatchRoute(route.path, route.callback, route.description || '');
+                    this.addRoute('PATCH', route.path, route.callback, route.description || '');
                 });
             }
         });

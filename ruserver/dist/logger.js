@@ -25,7 +25,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const winston = __importStar(require("winston"));
 class Logger {
-    constructor() {
+    constructor(prefix = 'RuServer') {
+        this.prefix = 'RuServer';
         this._logger = winston.createLogger({
             level: 'debug',
             format: winston.format.combine(winston.format.timestamp(), winston.format.printf(({ level, message, timestamp }) => {
@@ -43,7 +44,8 @@ class Logger {
                 new winston.transports.File({ filename: 'logs/general.log' }),
             ],
         });
-        this._logger.info('Logger initialized');
+        this.prefix = prefix;
+        this._logger.info('[' + this.prefix + '] Logger initialized');
     }
     error(message) {
         this._logger.error(message);

@@ -108,42 +108,7 @@ declare class RuServer {
      * @description Inicia o servidor na porta definida no construtor
      */
     start(): void;
-    /**
-     *
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo GET
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    private addGetRoute;
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo POST
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    private addPostRoute;
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo PUT
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    private addPutRoute;
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo DELETE
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    private addDeleteRoute;
-    /**
-     * @param path Caminho da rota (ex: '/')
-     * @param callback Função que será executada quando a rota for acessada
-     * @description Adiciona uma rota do tipo PATCH
-     * @documentation https://expressjs.com/pt-br/guide/routing.html
-     */
-    private addPatchRoute;
+    private addRoute;
     /**
      *
      *  @description Retorna todas as rotas registradas no servidor

@@ -1,6 +1,7 @@
 export default class Logger {
     private _logger;
-    constructor();
+    private prefix;
+    constructor(prefix?: string);
     error(message: string): void;
     warn(message: string): void;
     info(message: string): void;
