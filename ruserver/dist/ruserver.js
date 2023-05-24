@@ -3,12 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RuServer = exports.Controller = exports.Patch = exports.Put = exports.Delete = exports.Post = exports.Get = void 0;
+exports.Logger = exports.RuServer = exports.Controller = exports.Patch = exports.Put = exports.Delete = exports.Post = exports.Get = void 0;
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 require("reflect-metadata");
 const logger_1 = __importDefault(require("./logger"));
+exports.Logger = logger_1.default;
 const GET_METADATA_KEY = 'express:router:get';
 const POST_METADATA_KEY = 'express:router:post';
 const PUT_METADATA_KEY = 'express:router:put';
@@ -248,7 +249,7 @@ class RuServer {
     }
 }
 exports.RuServer = RuServer;
-function Get(path, description = '') {
+function Get(path = '', description = '') {
     return function (target, propertyKey) {
         const getRoutes = Reflect.getMetadata(GET_METADATA_KEY, target.constructor) || [];
         const route = {
@@ -264,7 +265,7 @@ function Get(path, description = '') {
     };
 }
 exports.Get = Get;
-function Post(path, description = '') {
+function Post(path = '', description = '') {
     return function (target, propertyKey) {
         const postRoutes = Reflect.getMetadata(POST_METADATA_KEY, target.constructor) || [];
         const route = {
@@ -280,7 +281,7 @@ function Post(path, description = '') {
     };
 }
 exports.Post = Post;
-function Delete(path, description = '') {
+function Delete(path = '', description = '') {
     return function (target, propertyKey) {
         const deleteRoutes = Reflect.getMetadata(DELETE_METADATA_KEY, target.constructor) || [];
         const route = {
@@ -296,7 +297,7 @@ function Delete(path, description = '') {
     };
 }
 exports.Delete = Delete;
-function Put(path, description = '') {
+function Put(path = '', description = '') {
     return function (target, propertyKey) {
         const putRoutes = Reflect.getMetadata(PUT_METADATA_KEY, target.constructor) || [];
         const route = {
@@ -312,7 +313,7 @@ function Put(path, description = '') {
     };
 }
 exports.Put = Put;
-function Patch(path, description = '') {
+function Patch(path = '', description = '') {
     return function (target, propertyKey) {
         const patchRoutes = Reflect.getMetadata(PATCH_METADATA_KEY, target.constructor) || [];
         const route = {

@@ -410,7 +410,7 @@ class RuServer {
     }
 }
 
-export function Get(path: string, description: string = '') {
+export function Get(path: string = '', description: string = '') {
     return function (target: any, propertyKey: string) {
         const getRoutes =
             Reflect.getMetadata(GET_METADATA_KEY, target.constructor) || [];
@@ -442,7 +442,7 @@ export function Get(path: string, description: string = '') {
     };
 }
 
-export function Post(path: string, description: string = '') {
+export function Post(path: string = '', description: string = '') {
     return function (target: any, propertyKey: string) {
         const postRoutes =
             Reflect.getMetadata(POST_METADATA_KEY, target.constructor) || [];
@@ -474,7 +474,7 @@ export function Post(path: string, description: string = '') {
     };
 }
 
-export function Delete(path: string, description: string = '') {
+export function Delete(path: string = '', description: string = '') {
     return function (target: any, propertyKey: string) {
         const deleteRoutes =
             Reflect.getMetadata(DELETE_METADATA_KEY, target.constructor) || [];
@@ -506,7 +506,7 @@ export function Delete(path: string, description: string = '') {
     };
 }
 
-export function Put(path: string, description: string = '') {
+export function Put(path: string = '', description: string = '') {
     return function (target: any, propertyKey: string) {
         const putRoutes =
             Reflect.getMetadata(PUT_METADATA_KEY, target.constructor) || [];
@@ -538,7 +538,7 @@ export function Put(path: string, description: string = '') {
     };
 }
 
-export function Patch(path: string, description: string = '') {
+export function Patch(path: string = '', description: string = '') {
     return function (target: any, propertyKey: string) {
         const patchRoutes =
             Reflect.getMetadata(PATCH_METADATA_KEY, target.constructor) || [];
@@ -586,4 +586,5 @@ export {
     RuServer,
     RouteInterface,
     RequestData,
+    Logger,
 };

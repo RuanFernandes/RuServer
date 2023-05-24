@@ -165,13 +165,13 @@ declare class RuServer {
      */
     loadControllers(apiData: Controlador[]): void;
 }
-export declare function Get(path: string, description?: string): (target: any, propertyKey: string) => void;
-export declare function Post(path: string, description?: string): (target: any, propertyKey: string) => void;
-export declare function Delete(path: string, description?: string): (target: any, propertyKey: string) => void;
-export declare function Put(path: string, description?: string): (target: any, propertyKey: string) => void;
-export declare function Patch(path: string, description?: string): (target: any, propertyKey: string) => void;
+export declare function Get(path?: string, description?: string): (target: any, propertyKey: string) => void;
+export declare function Post(path?: string, description?: string): (target: any, propertyKey: string) => void;
+export declare function Delete(path?: string, description?: string): (target: any, propertyKey: string) => void;
+export declare function Put(path?: string, description?: string): (target: any, propertyKey: string) => void;
+export declare function Patch(path?: string, description?: string): (target: any, propertyKey: string) => void;
 declare class Controlador {
     constructor();
 }
 export declare function Controller(): (constructor: Function) => void;
-export { expressRequest, expressResponse, RuServer, RouteInterface, RequestData, };
+export { expressRequest, expressResponse, RuServer, RouteInterface, RequestData, Logger, };
