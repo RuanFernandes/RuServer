@@ -1,5 +1,6 @@
 import { Express, Response } from 'express';
 import 'reflect-metadata';
+import Logger from './logger';
 interface RouteInterface {
     path: string;
     callback: () => void;
@@ -91,11 +92,17 @@ declare class RuServer {
     private port;
     private app;
     private routes;
+    private _logger;
     /**
      *
      * @param port Porta que o servidor irá rodar
      */
     constructor(port?: number);
+    /**
+     * @description Retorna o logger da aplicação
+     * @returns Logger
+     */
+    get logger(): Logger;
     /**
      *
      * @description Inicia o servidor na porta definida no construtor

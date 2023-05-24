@@ -4,35 +4,29 @@ export default class Logger {
     private _logger: winston.Logger;
 
     constructor() {
-        const logLevels = {
-            error: 'red',
-            warn: 'yellow',
-            info: 'green',
-            debug: 'blue',
-            http: 'magenta',
-        };
-
         this._logger = winston.createLogger({
             level: 'debug',
             format: winston.format.combine(
-                winston.format.colorize(),
                 winston.format.timestamp(),
                 winston.format.printf(({ level, message, timestamp }) => {
-                    return `[${timestamp}] ${level}: ${message}`;
+                    return `[${timestamp}] ${level
+                        .charAt(0)
+                        .toLocaleUpperCase()}${level.substring(1)}: ${message}`;
                 })
             ),
             transports: [
                 new winston.transports.Console(),
                 new winston.transports.File({
                     filename: 'logs/error.log',
+                    format: winston.format.combine(
+                        winston.format.timestamp(),
+                        winston.format.json()
+                    ),
                     level: 'error',
                 }),
-                new winston.transports.File({ filename: 'logs/http_log.log' }),
-                new winston.transports.File({ filename: 'logs/combined.log' }),
+                new winston.transports.File({ filename: 'logs/general.log' }),
             ],
         });
-
-        winston.addColors(logLevels);
 
         this._logger.info('Logger initialized');
     }

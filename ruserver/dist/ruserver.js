@@ -8,6 +8,7 @@ const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 require("reflect-metadata");
+const logger_1 = __importDefault(require("./logger"));
 const GET_METADATA_KEY = 'express:router:get';
 const POST_METADATA_KEY = 'express:router:post';
 const PUT_METADATA_KEY = 'express:router:put';
@@ -29,9 +30,17 @@ class RuServer {
         this.port = port;
         this.routes = new Array();
         this.app = (0, express_1.default)();
+        this._logger = new logger_1.default();
         this.app.use(body_parser_1.default.json());
         this.app.use(body_parser_1.default.urlencoded({ extended: true }));
         this.app.use((0, cors_1.default)());
+    }
+    /**
+     * @description Retorna o logger da aplicação
+     * @returns Logger
+     */
+    get logger() {
+        return this._logger;
     }
     /**
      *
@@ -57,7 +66,7 @@ class RuServer {
             throw new Error(`Route GET/${existingRoute.path} already exists.`);
         }
         this.app.get(path, (req, res) => {
-            const data = callback(req);
+            const data = callback(req, this.logger);
             res.send(data);
         });
         this.routes.push({
@@ -80,7 +89,7 @@ class RuServer {
             throw new Error(`Route POST/${existingRoute.path} already exists.`);
         }
         this.app.post(path, (req, res) => {
-            const data = callback(req);
+            const data = callback(req, this.logger);
             res.send(data);
         });
         this.routes.push({
@@ -103,7 +112,7 @@ class RuServer {
             throw new Error(`Route PUT/${existingRoute.path} already exists.`);
         }
         this.app.put(path, (req, res) => {
-            const data = callback(req);
+            const data = callback(req, this.logger);
             res.send(data);
         });
         this.routes.push({
@@ -126,7 +135,7 @@ class RuServer {
             throw new Error(`Route DELETE/${existingRoute.path} already exists.`);
         }
         this.app.delete(path, (req, res) => {
-            const data = callback(req);
+            const data = callback(req, this.logger);
             res.send(data);
         });
         this.routes.push({
@@ -149,7 +158,7 @@ class RuServer {
             throw new Error(`Route PATCH/${existingRoute.path} already exists.`);
         }
         this.app.patch(path, (req, res) => {
-            const data = callback(req);
+            const data = callback(req, this.logger);
             res.send(data);
         });
         this.routes.push({
