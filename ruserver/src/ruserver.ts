@@ -2,6 +2,7 @@ import express, { Express, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import 'reflect-metadata';
+import Logger from './logger';
 
 const GET_METADATA_KEY = 'express:router:get';
 const POST_METADATA_KEY = 'express:router:post';
@@ -104,6 +105,7 @@ type RouteType = {
 class RuServer {
     private app: Express;
     private routes: RouteType[];
+    private _logger: Logger;
 
     /**
      *
@@ -112,10 +114,19 @@ class RuServer {
     constructor(private port: number = 3000) {
         this.routes = new Array<RouteType>();
         this.app = express();
+        this._logger = new Logger();
 
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(cors());
+    }
+
+    /**
+     * @description Retorna o logger da aplicação
+     * @returns Logger
+     */
+    public get logger(): Logger {
+        return this._logger;
     }
 
     /**
@@ -145,7 +156,7 @@ class RuServer {
         }
 
         this.app.get(path, (req, res) => {
-            const data = callback(req);
+            const data = callback(req, this.logger);
             res.send(data);
         });
 
@@ -176,7 +187,7 @@ class RuServer {
         }
 
         this.app.post(path, (req, res) => {
-            const data = callback(req);
+            const data = callback(req, this.logger);
             res.send(data);
         });
 
@@ -203,7 +214,7 @@ class RuServer {
         }
 
         this.app.put(path, (req, res) => {
-            const data = callback(req);
+            const data = callback(req, this.logger);
             res.send(data);
         });
 
@@ -236,7 +247,7 @@ class RuServer {
         }
 
         this.app.delete(path, (req, res) => {
-            const data = callback(req);
+            const data = callback(req, this.logger);
             res.send(data);
         });
 
@@ -268,7 +279,7 @@ class RuServer {
             );
         }
         this.app.patch(path, (req, res) => {
-            const data = callback(req);
+            const data = callback(req, this.logger);
             res.send(data);
         });
 
