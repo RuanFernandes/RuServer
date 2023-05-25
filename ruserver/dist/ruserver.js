@@ -64,31 +64,31 @@ class RuServer {
             case 'GET':
                 this.app.get(path, (req, res) => {
                     const data = callback(req, this.logger);
-                    res.send(data);
+                    res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'POST':
                 this.app.post(path, (req, res) => {
                     const data = callback(req, this.logger);
-                    res.send(data);
+                    res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'PUT':
                 this.app.put(path, (req, res) => {
                     const data = callback(req, this.logger);
-                    res.send(data);
+                    res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'DELETE':
                 this.app.delete(path, (req, res) => {
                     const data = callback(req, this.logger);
-                    res.send(data);
+                    res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'PATCH':
                 this.app.patch(path, (req, res) => {
                     const data = callback(req, this.logger);
-                    res.send(data);
+                    res.status(data.statusCode).send(data.message);
                 });
                 break;
         }

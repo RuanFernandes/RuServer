@@ -1,0 +1,1 @@
+{"version":3,"file":"ResponseReturnUnauthorized.js","sourceRoot":"","sources":["../../src/RequestResponseTypes/ResponseReturnUnauthorized.ts"],"names":[],"mappings":";;;AAAA,uDAAmD;AAEnD,MAAa,YAAa,SAAQ,gCAAc;IAC5C,YAAY,UAAkB,cAAc;QACxC,KAAK,EAAE,CAAC;QAER,IAAI,CAAC,UAAU,GAAG,GAAG,CAAC;QACtB,IAAI,CAAC,OAAO,GAAG,OAAO,CAAC;QAEvB,OAAO,IAAI,CAAC;IAChB,CAAC;CACJ;AATD,oCASC"}

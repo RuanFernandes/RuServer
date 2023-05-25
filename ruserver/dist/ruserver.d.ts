@@ -1,9 +1,10 @@
 import { Express, Response } from 'express';
 import 'reflect-metadata';
 import Logger from './logger';
+import { IGenericReturn } from './RequestResponseTypes/IGenericReturns';
 interface RouteInterface {
     path: string;
-    callback: () => void;
+    callback: () => IGenericReturn;
     description?: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 }

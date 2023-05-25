@@ -1,0 +1,1 @@
+{"version":3,"file":"ResponseReturnOK.js","sourceRoot":"","sources":["../../src/RequestResponseTypes/ResponseReturnOK.ts"],"names":[],"mappings":";;;AAAA,uDAAmD;AAEnD,MAAa,EAAG,SAAQ,gCAAc;IAClC,YAAY,UAAkB,IAAI;QAC9B,KAAK,EAAE,CAAC;QAER,IAAI,CAAC,UAAU,GAAG,GAAG,CAAC;QACtB,IAAI,CAAC,OAAO,GAAG,OAAO,CAAC;QAEvB,OAAO,IAAI,CAAC;IAChB,CAAC;CACJ;AATD,gBASC"}

@@ -1,5 +1,10 @@
 ## Biblioteca de Express para criar um servidor basico e configurado.
 
+## Importante
+Esta biblioteca está em desenvolvimento, então pode conter bugs e não está completa.
+Baixe sempre a ultima versão, pois ela pode conter correções de bugs e novas funcionalidades.
+E fique de olho no README, pois ele pode conter informações importantes.
+
 ### Sobre
 Biblioteca RuServer de Ruan Fernandes.
 Feita em cima do Express, ela facilita a criação de um servidor basico e configurado com controladores.
@@ -7,6 +12,9 @@ Ela usa Controllers para facilitar a criação de rotas e ações.
 
 REPOSITÓRIO:
 - [GitHub](https://github.com/RuanFernandes/RuServer)
+
+DOAÇÕES:
+- [PayPal](https://www.paypal.com/donate/?hosted_button_id=SLNNKWBQCRSBE)
 
 ### Como usar
 Para usar a biblioteca, basta instalar ela com o comando:

@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import 'reflect-metadata';
 import Logger from './logger';
+import { IGenericReturn } from './RequestResponseTypes/IGenericReturns';
 
 const GET_METADATA_KEY = 'express:router:get';
 const POST_METADATA_KEY = 'express:router:post';
@@ -12,7 +13,7 @@ const PATCH_METADATA_KEY = 'express:router:patch';
 
 interface RouteInterface {
     path: string;
-    callback: () => void;
+    callback: () => IGenericReturn;
     description?: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 }
@@ -142,7 +143,7 @@ class RuServer {
     private addRoute(
         method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
         path: string,
-        callback: Function,
+        callback: (req: RequestData, logger: Logger) => IGenericReturn,
         description: string
     ) {
         const existingRoute = this.routes.find((route) => {
@@ -160,33 +161,33 @@ class RuServer {
             case 'GET':
                 this.app.get(path, (req, res) => {
                     const data = callback(req, this.logger);
-                    res.send(data);
+                    res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'POST':
                 this.app.post(path, (req, res) => {
                     const data = callback(req, this.logger);
-                    res.send(data);
+                    res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'PUT':
                 this.app.put(path, (req, res) => {
                     const data = callback(req, this.logger);
-                    res.send(data);
+                    res.status(data.statusCode).send(data.message);
                 });
                 break;
 
             case 'DELETE':
                 this.app.delete(path, (req, res) => {
                     const data = callback(req, this.logger);
-                    res.send(data);
+                    res.status(data.statusCode).send(data.message);
                 });
                 break;
 
             case 'PATCH':
                 this.app.patch(path, (req, res) => {
                     const data = callback(req, this.logger);
-                    res.send(data);
+                    res.status(data.statusCode).send(data.message);
                 });
                 break;
         }

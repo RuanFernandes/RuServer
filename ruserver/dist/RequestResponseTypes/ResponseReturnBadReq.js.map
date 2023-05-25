@@ -1,0 +1,1 @@
+{"version":3,"file":"ResponseReturnBadReq.js","sourceRoot":"","sources":["../../src/RequestResponseTypes/ResponseReturnBadReq.ts"],"names":[],"mappings":";;;AAAA,uDAAmD;AAEnD,MAAa,UAAW,SAAQ,gCAAc;IAC1C,YAAY,UAAkB,aAAa;QACvC,KAAK,EAAE,CAAC;QAER,IAAI,CAAC,UAAU,GAAG,GAAG,CAAC;QACtB,IAAI,CAAC,OAAO,GAAG,OAAO,CAAC;QAEvB,OAAO,IAAI,CAAC;IAChB,CAAC;CACJ;AATD,gCASC"}
