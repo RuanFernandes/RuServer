@@ -35,7 +35,7 @@ server.start();
 E criar um controller com o nome desejado, no meu caso HelloWorld.ts
 ```ts
 // # Path: HelloWorld.ts
-import { Controller, Get, Post, RequestData, Logger } from 'ruserver';
+import { Controller, Get, Post, RequestData, Logger, Ok, BadRequest } from 'ruserver';
 @Controller()
 export class HelloWorld {
    
@@ -52,26 +52,27 @@ export class HelloWorld {
 
         // requestData.query é um objeto com os parâmetros da query string
         if (requestData.query.name) {
-            return `Hello ${requestData.query.name}!`;
+            return new Ok('Bem vindo ' + requestData.query.name);
         }
 
-        return 'Hello world!';
+        // Tipos de Retorno Ok(data), Unauthorized(data), BadRequest(data), InternalError(data), NoContentOK(data)
+        return new Ok('Bem vindo ao servidor');
     }
 
     @Get('test/:id')
     test(requestData: RequestData) {
         // requestData.params é um objeto com os parâmetros da URL
-        return `Test ${requestData.params.id}`;
+        return new Ok(`Test ${requestData.params.id}`);
     }
 
     @Post()
     post(requestData: RequestData) {
         if (!requestData.body.name) {
-            return `Name is required`;
+            return new BadRequest(`Name is required`);
         }
 
         // requestData.body é um objeto com os parâmetros do corpo da requisição
-        return `Post ${requestData.body.name}`;
+        return new Ok(`Post ${requestData.body.name}`);
     }
 }
 ```

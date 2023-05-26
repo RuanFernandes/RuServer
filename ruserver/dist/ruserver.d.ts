@@ -4,7 +4,7 @@ import Logger from './logger';
 import { IGenericReturn } from './RequestResponseTypes/IGenericReturns';
 interface RouteInterface {
     path: string;
-    callback: () => IGenericReturn;
+    callback: (req: RequestData, logger: Logger) => IGenericReturn;
     description?: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 }

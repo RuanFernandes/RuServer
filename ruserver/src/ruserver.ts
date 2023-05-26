@@ -13,7 +13,7 @@ const PATCH_METADATA_KEY = 'express:router:patch';
 
 interface RouteInterface {
     path: string;
-    callback: () => IGenericReturn;
+    callback: (req: RequestData, logger: Logger) => IGenericReturn;
     description?: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 }
@@ -328,9 +328,12 @@ export function Get(path: string = '', description: string = '') {
     return function (target: any, propertyKey: string) {
         const getRoutes =
             Reflect.getMetadata(GET_METADATA_KEY, target.constructor) || [];
+
+        const callback: (req: RequestData, logger: Logger) => IGenericReturn =
+            target[propertyKey];
         const route: RouteInterface = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
+            callback: callback,
             description: description,
             method: 'GET',
         };
