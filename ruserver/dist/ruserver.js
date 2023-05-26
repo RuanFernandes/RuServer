@@ -10,7 +10,6 @@ const cors_1 = __importDefault(require("cors"));
 require("reflect-metadata");
 const logger_1 = __importDefault(require("./logger"));
 exports.Logger = logger_1.default;
-const IGenericReturns_1 = require("./RequestResponseTypes/IGenericReturns");
 const GET_METADATA_KEY = 'express:router:get';
 const POST_METADATA_KEY = 'express:router:post';
 const PUT_METADATA_KEY = 'express:router:put';
@@ -59,14 +58,6 @@ class RuServer {
         });
         if (existingRoute) {
             throw new Error(`Route ${method}/${existingRoute.path} already exists.`);
-        }
-        const callBackReturnType = typeof callback({
-            body: {},
-            params: {},
-            query: {},
-        }, this.logger);
-        if (!(callBackReturnType instanceof IGenericReturns_1.IGenericReturn)) {
-            throw new Error('Callback must have a return type of IGenericReturn. (Ok(), Unauthorized(), BadRequest(), InternalError(), NoContentOK())');
         }
         //TODO: adicionar no tipo do req um valor para status code
         switch (method) {
