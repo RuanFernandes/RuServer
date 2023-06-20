@@ -59,7 +59,6 @@ class RuServer {
         if (existingRoute) {
             throw new Error(`Route ${method}/${existingRoute.path} already exists.`);
         }
-        //TODO: adicionar no tipo do req um valor para status code
         switch (method) {
             case 'GET':
                 this.app.get(path, (req, res) => {
@@ -199,9 +198,10 @@ exports.Get = Get;
 function Post(path = '', description = '') {
     return function (target, propertyKey) {
         const postRoutes = Reflect.getMetadata(POST_METADATA_KEY, target.constructor) || [];
+        const callback = target[propertyKey];
         const route = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
+            callback: callback,
             description: description,
             method: 'POST',
         };
@@ -215,9 +215,10 @@ exports.Post = Post;
 function Delete(path = '', description = '') {
     return function (target, propertyKey) {
         const deleteRoutes = Reflect.getMetadata(DELETE_METADATA_KEY, target.constructor) || [];
+        const callback = target[propertyKey];
         const route = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
+            callback: callback,
             description: description,
             method: 'DELETE',
         };
@@ -231,9 +232,10 @@ exports.Delete = Delete;
 function Put(path = '', description = '') {
     return function (target, propertyKey) {
         const putRoutes = Reflect.getMetadata(PUT_METADATA_KEY, target.constructor) || [];
+        const callback = target[propertyKey];
         const route = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
+            callback: callback,
             description: description,
             method: 'PUT',
         };
@@ -247,9 +249,10 @@ exports.Put = Put;
 function Patch(path = '', description = '') {
     return function (target, propertyKey) {
         const patchRoutes = Reflect.getMetadata(PATCH_METADATA_KEY, target.constructor) || [];
+        const callback = target[propertyKey];
         const route = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
+            callback: callback,
             description: description,
             method: 'PATCH',
         };

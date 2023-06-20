@@ -1,54 +1,75 @@
-import * as winston from 'winston';
+import { writeFileSync } from 'fs';
 
+export enum LogLevel {
+    ERROR = 0,
+    WARN = 1,
+    INFO = 2,
+    DEBUG = 3,
+    HTTP = 4,
+}
+
+/**
+ * Logger class
+ * @class Logger
+ * @description Logger class
+ * @export Logger
+ * @example
+ * import Logger from 'logger';
+ *
+ * const logger = new Logger('RuServer', [LogLevel.ERROR, LogLevel.WARN]);
+ * logger.error('Error message');
+ * logger.warn('Warn message');
+ * logger.info('Info message');
+ * logger.debug('Debug message');
+ * logger.http('Http message');
+ **/
 export default class Logger {
-    private _logger: winston.Logger;
     private prefix: string = 'RuServer';
+    private logLevel: LogLevel[] = [LogLevel.ERROR];
 
-    constructor(prefix: string = 'RuServer') {
-        this._logger = winston.createLogger({
-            level: 'debug',
-            format: winston.format.combine(
-                winston.format.timestamp(),
-                winston.format.printf(({ level, message, timestamp }) => {
-                    return `[${timestamp}] ${level
-                        .charAt(0)
-                        .toLocaleUpperCase()}${level.substring(1)}: ${message}`;
-                })
-            ),
-            transports: [
-                new winston.transports.Console(),
-                new winston.transports.File({
-                    filename: 'logs/error.log',
-                    format: winston.format.combine(
-                        winston.format.timestamp(),
-                        winston.format.json()
-                    ),
-                    level: 'error',
-                }),
-                new winston.transports.File({ filename: 'logs/general.log' }),
-            ],
-        });
+    constructor(prefix: string = 'RuServer', logLevel?: LogLevel[]) {
         this.prefix = prefix;
-        this._logger.info('[' + this.prefix + '] Logger initialized');
+        if (logLevel) {
+            this.logLevel = logLevel;
+        }
     }
 
     public error(message: string): void {
-        this._logger.error(message);
+        if (this.logLevel.includes(LogLevel.ERROR)) {
+            console.error(`[ERROR|${this.prefix}] ${message}`);
+            this.writeLog(message, 'errorslog');
+        }
     }
 
     public warn(message: string): void {
-        this._logger.warn(message);
+        if (this.logLevel.includes(LogLevel.WARN)) {
+            console.warn(`[WARN|${this.prefix}] ${message}`);
+            this.writeLog(message);
+        }
     }
 
     public info(message: string): void {
-        this._logger.info(message);
+        if (this.logLevel.includes(LogLevel.INFO)) {
+            console.info(`[INFO|${this.prefix}] ${message}`);
+            this.writeLog(message);
+        }
     }
 
     public debug(message: string): void {
-        this._logger.debug(message);
+        if (this.logLevel.includes(LogLevel.DEBUG)) {
+            console.debug(`[DEBUG|${this.prefix}] ${message}`);
+            this.writeLog(message);
+        }
     }
 
     public http(message: string): void {
-        this._logger.http(message);
+        if (this.logLevel.includes(LogLevel.HTTP)) {
+            console.debug(`[HTTP|${this.prefix}] ${message}`);
+            this.writeLog(message, 'httplog');
+        }
+    }
+
+    private writeLog(message: string, pref?: string): void {
+        writeFileSync(pref !== undefined ? pref + '.txt' : 'log.txt', message);
     }
 }

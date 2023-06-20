@@ -156,7 +156,6 @@ class RuServer {
             );
         }
 
-        //TODO: adicionar no tipo do req um valor para status code
         switch (method) {
             case 'GET':
                 this.app.get(path, (req, res) => {
@@ -331,6 +330,7 @@ export function Get(path: string = '', description: string = '') {
 
         const callback: (req: RequestData, logger: Logger) => IGenericReturn =
             target[propertyKey];
+
         const route: RouteInterface = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
             callback: callback,
@@ -363,12 +363,17 @@ export function Post(path: string = '', description: string = '') {
     return function (target: any, propertyKey: string) {
         const postRoutes =
             Reflect.getMetadata(POST_METADATA_KEY, target.constructor) || [];
+
+        const callback: (req: RequestData, logger: Logger) => IGenericReturn =
+            target[propertyKey];
+
         const route: RouteInterface = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
+            callback: callback,
             description: description,
             method: 'POST',
         };
+
         Reflect.defineMetadata(
             POST_METADATA_KEY,
             [...postRoutes, route],
@@ -381,7 +386,9 @@ export function Post(path: string = '', description: string = '') {
                 target.constructor,
                 propertyKey
             ) || [];
+
         metadata.push({ type: 'POST', path, description });
+
         Reflect.defineMetadata(
             POST_METADATA_KEY,
             metadata,
@@ -395,9 +402,13 @@ export function Delete(path: string = '', description: string = '') {
     return function (target: any, propertyKey: string) {
         const deleteRoutes =
             Reflect.getMetadata(DELETE_METADATA_KEY, target.constructor) || [];
+
+        const callback: (req: RequestData, logger: Logger) => IGenericReturn =
+            target[propertyKey];
+
         const route: RouteInterface = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
+            callback: callback,
             description: description,
             method: 'DELETE',
         };
@@ -427,9 +438,13 @@ export function Put(path: string = '', description: string = '') {
     return function (target: any, propertyKey: string) {
         const putRoutes =
             Reflect.getMetadata(PUT_METADATA_KEY, target.constructor) || [];
+
+        const callback: (req: RequestData, logger: Logger) => IGenericReturn =
+            target[propertyKey];
+
         const route: RouteInterface = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
+            callback: callback,
             description: description,
             method: 'PUT',
         };
@@ -459,9 +474,13 @@ export function Patch(path: string = '', description: string = '') {
     return function (target: any, propertyKey: string) {
         const patchRoutes =
             Reflect.getMetadata(PATCH_METADATA_KEY, target.constructor) || [];
+
+        const callback: (req: RequestData, logger: Logger) => IGenericReturn =
+            target[propertyKey];
+
         const route: RouteInterface = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
-            callback: target[propertyKey],
+            callback: callback,
             description: description,
             method: 'PATCH',
         };

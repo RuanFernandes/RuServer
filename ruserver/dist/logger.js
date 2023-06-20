@@ -1,66 +1,71 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const winston = __importStar(require("winston"));
+exports.LogLevel = void 0;
+const fs_1 = require("fs");
+var LogLevel;
+(function (LogLevel) {
+    LogLevel[LogLevel["ERROR"] = 0] = "ERROR";
+    LogLevel[LogLevel["WARN"] = 1] = "WARN";
+    LogLevel[LogLevel["INFO"] = 2] = "INFO";
+    LogLevel[LogLevel["DEBUG"] = 3] = "DEBUG";
+    LogLevel[LogLevel["HTTP"] = 4] = "HTTP";
+})(LogLevel = exports.LogLevel || (exports.LogLevel = {}));
+/**
+ * Logger class
+ * @class Logger
+ * @description Logger class
+ * @export Logger
+ * @example
+ * import Logger from 'logger';
+ *
+ * const logger = new Logger('RuServer', [LogLevel.ERROR, LogLevel.WARN]);
+ * logger.error('Error message');
+ * logger.warn('Warn message');
+ * logger.info('Info message');
+ * logger.debug('Debug message');
+ * logger.http('Http message');
+ **/
 class Logger {
-    constructor(prefix = 'RuServer') {
+    constructor(prefix = 'RuServer', logLevel) {
         this.prefix = 'RuServer';
-        this._logger = winston.createLogger({
-            level: 'debug',
-            format: winston.format.combine(winston.format.timestamp(), winston.format.printf(({ level, message, timestamp }) => {
-                return `[${timestamp}] ${level
-                    .charAt(0)
-                    .toLocaleUpperCase()}${level.substring(1)}: ${message}`;
-            })),
-            transports: [
-                new winston.transports.Console(),
-                new winston.transports.File({
-                    filename: 'logs/error.log',
-                    format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
-                    level: 'error',
-                }),
-                new winston.transports.File({ filename: 'logs/general.log' }),
-            ],
-        });
+        this.logLevel = [LogLevel.ERROR];
         this.prefix = prefix;
-        this._logger.info('[' + this.prefix + '] Logger initialized');
+        if (logLevel) {
+            this.logLevel = logLevel;
+        }
     }
     error(message) {
-        this._logger.error(message);
+        if (this.logLevel.includes(LogLevel.ERROR)) {
+            console.error(`[ERROR|${this.prefix}] ${message}`);
+            this.writeLog(message, 'errorslog');
+        }
     }
     warn(message) {
-        this._logger.warn(message);
+        if (this.logLevel.includes(LogLevel.WARN)) {
+            console.warn(`[WARN|${this.prefix}] ${message}`);
+            this.writeLog(message);
+        }
     }
     info(message) {
-        this._logger.info(message);
+        if (this.logLevel.includes(LogLevel.INFO)) {
+            console.info(`[INFO|${this.prefix}] ${message}`);
+            this.writeLog(message);
+        }
     }
     debug(message) {
-        this._logger.debug(message);
+        if (this.logLevel.includes(LogLevel.DEBUG)) {
+            console.debug(`[DEBUG|${this.prefix}] ${message}`);
+            this.writeLog(message);
+        }
     }
     http(message) {
-        this._logger.http(message);
+        if (this.logLevel.includes(LogLevel.HTTP)) {
+            console.debug(`[HTTP|${this.prefix}] ${message}`);
+            this.writeLog(message, 'httplog');
+        }
+    }
+    writeLog(message, pref) {
+        (0, fs_1.writeFileSync)(pref !== undefined ? pref + '.txt' : 'log.txt', message);
     }
 }
 exports.default = Logger;
