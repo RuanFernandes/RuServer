@@ -8,8 +8,13 @@ import {
     Ok,
     BadRequest,
 } from 'ruserver';
+import { LogLevel } from 'ruserver/dist/logger';
 
-const server = new RuServer();
+const server = new RuServer(3000, [
+    LogLevel.ERROR,
+    LogLevel.DEBUG,
+    LogLevel.INFO,
+]);
 
 @Controller()
 class TestController {
@@ -19,9 +24,10 @@ class TestController {
 
     // Sem parametros, o método é chamado para o caminho "/"
     @Get()
-    index(requestData: RequestData, logger: Logger) {
+    index(requestData: RequestData, paramMap: Map<string, any>) {
         // requestData e logger são injetados automaticamente
         // Não é necessário declarar os parâmetros, somente se precisar usa-los
+        const logger = paramMap.get('logger') as Logger;
         logger.info('TestController.index() called');
 
         // requestData.query é um objeto com os parâmetros da query string

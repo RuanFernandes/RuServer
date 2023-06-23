@@ -1,10 +1,10 @@
 import { Express, Response } from 'express';
 import 'reflect-metadata';
-import Logger from './logger';
+import Logger, { LogLevel } from './logger';
 import { IGenericReturn } from './RequestResponseTypes/IGenericReturns';
 interface RouteInterface {
     path: string;
-    callback: (req: RequestData, logger: Logger) => IGenericReturn;
+    callback: (req: RequestData, paramMap: Map<string, any>) => IGenericReturn;
     description?: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 }
@@ -94,11 +94,13 @@ declare class RuServer {
     private app;
     private routes;
     private _logger;
+    private _logLevels;
+    private _paramMap;
     /**
      *
      * @param port Porta que o servidor irá rodar
      */
-    constructor(port?: number);
+    constructor(port?: number, logLevels?: LogLevel[]);
     /**
      * @description Retorna o logger da aplicação
      * @returns Logger
@@ -110,6 +112,10 @@ declare class RuServer {
      */
     start(): void;
     private addRoute;
+    /**
+     * @description Adiciona um parametro adicional para ser utilizado nas rotas do servidor
+     */
+    addParam(key: string, value: any): void;
     /**
      *
      *  @description Retorna todas as rotas registradas no servidor

@@ -2,7 +2,7 @@ import express, { Express, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import 'reflect-metadata';
-import Logger from './logger';
+import Logger, { LogLevel } from './logger';
 import { IGenericReturn } from './RequestResponseTypes/IGenericReturns';
 
 const GET_METADATA_KEY = 'express:router:get';
@@ -13,7 +13,7 @@ const PATCH_METADATA_KEY = 'express:router:patch';
 
 interface RouteInterface {
     path: string;
-    callback: (req: RequestData, logger: Logger) => IGenericReturn;
+    callback: (req: RequestData, paramMap: Map<string, any>) => IGenericReturn;
     description?: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 }
@@ -107,16 +107,21 @@ class RuServer {
     private app: Express;
     private routes: RouteType[];
     private _logger: Logger;
+    private _logLevels: LogLevel[] = [LogLevel.ERROR];
+
+    private _paramMap = new Map<string, any>();
 
     /**
      *
      * @param port Porta que o servidor irá rodar
      */
-    constructor(private port: number = 3000) {
+    constructor(private port: number = 3000, logLevels?: LogLevel[]) {
         this.routes = new Array<RouteType>();
-        this.app = express();
-        this._logger = new Logger();
+        this._paramMap = new Map<string, any>();
+        this._logger = new Logger('RuServer', logLevels || this._logLevels);
+        this._paramMap.set('logger', this._logger);
 
+        this.app = express();
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(cors());
@@ -143,7 +148,10 @@ class RuServer {
     private addRoute(
         method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
         path: string,
-        callback: (req: RequestData, logger: Logger) => IGenericReturn,
+        callback: (
+            req: RequestData,
+            paramMap: Map<string, any>
+        ) => IGenericReturn,
         description: string
     ) {
         const existingRoute = this.routes.find((route) => {
@@ -159,33 +167,33 @@ class RuServer {
         switch (method) {
             case 'GET':
                 this.app.get(path, (req, res) => {
-                    const data = callback(req, this.logger);
+                    const data = callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'POST':
                 this.app.post(path, (req, res) => {
-                    const data = callback(req, this.logger);
+                    const data = callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'PUT':
                 this.app.put(path, (req, res) => {
-                    const data = callback(req, this.logger);
+                    const data = callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
 
             case 'DELETE':
                 this.app.delete(path, (req, res) => {
-                    const data = callback(req, this.logger);
+                    const data = callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
 
             case 'PATCH':
                 this.app.patch(path, (req, res) => {
-                    const data = callback(req, this.logger);
+                    const data = callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
@@ -196,6 +204,14 @@ class RuServer {
             path: path,
             description: description,
         });
+    }
+
+    /**
+     * @description Adiciona um parametro adicional para ser utilizado nas rotas do servidor
+     */
+
+    public addParam(key: string, value: any) {
+        this._paramMap.set(key, value);
     }
 
     /**
@@ -328,8 +344,10 @@ export function Get(path: string = '', description: string = '') {
         const getRoutes =
             Reflect.getMetadata(GET_METADATA_KEY, target.constructor) || [];
 
-        const callback: (req: RequestData, logger: Logger) => IGenericReturn =
-            target[propertyKey];
+        const callback: (
+            req: RequestData,
+            paramMap: Map<string, any>
+        ) => IGenericReturn = target[propertyKey];
 
         const route: RouteInterface = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
@@ -364,8 +382,10 @@ export function Post(path: string = '', description: string = '') {
         const postRoutes =
             Reflect.getMetadata(POST_METADATA_KEY, target.constructor) || [];
 
-        const callback: (req: RequestData, logger: Logger) => IGenericReturn =
-            target[propertyKey];
+        const callback: (
+            req: RequestData,
+            paramMap: Map<string, any>
+        ) => IGenericReturn = target[propertyKey];
 
         const route: RouteInterface = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
@@ -403,8 +423,10 @@ export function Delete(path: string = '', description: string = '') {
         const deleteRoutes =
             Reflect.getMetadata(DELETE_METADATA_KEY, target.constructor) || [];
 
-        const callback: (req: RequestData, logger: Logger) => IGenericReturn =
-            target[propertyKey];
+        const callback: (
+            req: RequestData,
+            paramMap: Map<string, any>
+        ) => IGenericReturn = target[propertyKey];
 
         const route: RouteInterface = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
@@ -439,8 +461,10 @@ export function Put(path: string = '', description: string = '') {
         const putRoutes =
             Reflect.getMetadata(PUT_METADATA_KEY, target.constructor) || [];
 
-        const callback: (req: RequestData, logger: Logger) => IGenericReturn =
-            target[propertyKey];
+        const callback: (
+            req: RequestData,
+            paramMap: Map<string, any>
+        ) => IGenericReturn = target[propertyKey];
 
         const route: RouteInterface = {
             path: path.charAt(0) !== '/' ? '/' + path : path,
@@ -475,8 +499,10 @@ export function Patch(path: string = '', description: string = '') {
         const patchRoutes =
             Reflect.getMetadata(PATCH_METADATA_KEY, target.constructor) || [];
 
-        const callback: (req: RequestData, logger: Logger) => IGenericReturn =
-            target[propertyKey];
+        const callback: (
+            req: RequestData,
+            paramMap: Map<string, any>
+        ) => IGenericReturn = target[propertyKey];
 
         const route: RouteInterface = {
             path: path.charAt(0) !== '/' ? '/' + path : path,

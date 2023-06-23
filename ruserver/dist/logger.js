@@ -65,7 +65,7 @@ class Logger {
         }
     }
     writeLog(message, pref) {
-        (0, fs_1.writeFileSync)(pref !== undefined ? pref + '.txt' : 'log.txt', message);
+        (0, fs_1.writeFileSync)(pref !== undefined ? 'logs/' + pref + '.txt' : 'logs/log.txt', message);
     }
 }
 exports.default = Logger;

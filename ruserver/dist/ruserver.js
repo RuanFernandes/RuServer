@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -8,7 +31,7 @@ const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 require("reflect-metadata");
-const logger_1 = __importDefault(require("./logger"));
+const logger_1 = __importStar(require("./logger"));
 exports.Logger = logger_1.default;
 const GET_METADATA_KEY = 'express:router:get';
 const POST_METADATA_KEY = 'express:router:post';
@@ -27,11 +50,15 @@ class RuServer {
      *
      * @param port Porta que o servidor irá rodar
      */
-    constructor(port = 3000) {
+    constructor(port = 3000, logLevels) {
         this.port = port;
+        this._logLevels = [logger_1.LogLevel.ERROR];
+        this._paramMap = new Map();
         this.routes = new Array();
+        this._paramMap = new Map();
+        this._logger = new logger_1.default('RuServer', logLevels || this._logLevels);
+        this._paramMap.set('logger', this._logger);
         this.app = (0, express_1.default)();
-        this._logger = new logger_1.default();
         this.app.use(body_parser_1.default.json());
         this.app.use(body_parser_1.default.urlencoded({ extended: true }));
         this.app.use((0, cors_1.default)());
@@ -62,31 +89,31 @@ class RuServer {
         switch (method) {
             case 'GET':
                 this.app.get(path, (req, res) => {
-                    const data = callback(req, this.logger);
+                    const data = callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'POST':
                 this.app.post(path, (req, res) => {
-                    const data = callback(req, this.logger);
+                    const data = callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'PUT':
                 this.app.put(path, (req, res) => {
-                    const data = callback(req, this.logger);
+                    const data = callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'DELETE':
                 this.app.delete(path, (req, res) => {
-                    const data = callback(req, this.logger);
+                    const data = callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'PATCH':
                 this.app.patch(path, (req, res) => {
-                    const data = callback(req, this.logger);
+                    const data = callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
@@ -96,6 +123,12 @@ class RuServer {
             path: path,
             description: description,
         });
+    }
+    /**
+     * @description Adiciona um parametro adicional para ser utilizado nas rotas do servidor
+     */
+    addParam(key, value) {
+        this._paramMap.set(key, value);
     }
     /**
      *

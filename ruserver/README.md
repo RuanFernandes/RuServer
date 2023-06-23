@@ -45,10 +45,12 @@ export class HelloWorld {
 
     // Sem primeiro parametro, o método é chamado para o caminho "/"
     @Get('', 'Descricao do metodo')
-    index(requestData: RequestData, logger: Logger) {
+    index(requestData: RequestData, extraParams: Map<string, any>) {
         // requestData e logger são injetados automaticamente
         // Não é necessário declarar os parâmetros, somente se precisar usa-los
-        logger.info('TestController.index() called');
+        const Logger: Logger = extraParams.get("logger");
+
+        Logger.info("TestController.index() called");
 
         // requestData.query é um objeto com os parâmetros da query string
         if (requestData.query.name) {
@@ -84,11 +86,10 @@ Após tudo feito, basta iniciar as requisições nas rotas criadas.
 - [x] Criar biblioteca
 - [x] Criar documentação
 - [x] Criar exemplos
-- [ ] Criar função para modificar o status code da resposta
-- [ ] Criar função para modificar o cabeçalho da resposta
-- [ ] Criar função para modificar o corpo da resposta
+- [x] Criar função para modificar o status code da resposta
+- [x] Criar função para modificar o cabeçalho da resposta
+- [x] Criar função para modificar o corpo da resposta
 - [ ] Criar função para autenticar o usuário
-- [ ] Criar funções para implementar uma ORM (Prisma)
 
 ## Exemplos
 - [x] Criar um servidor basico

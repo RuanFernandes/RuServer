@@ -70,6 +70,9 @@ export default class Logger {
     }
 
     private writeLog(message: string, pref?: string): void {
-        writeFileSync(pref !== undefined ? pref + '.txt' : 'log.txt', message);
+        writeFileSync(
+            pref !== undefined ? 'logs/' + pref + '.txt' : 'logs/log.txt',
+            message
+        );
     }
 }
