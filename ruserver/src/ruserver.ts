@@ -166,34 +166,34 @@ class RuServer {
 
         switch (method) {
             case 'GET':
-                this.app.get(path, (req, res) => {
-                    const data = callback(req, this._paramMap);
+                this.app.get(path, async (req, res) => {
+                    const data = await callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'POST':
-                this.app.post(path, (req, res) => {
-                    const data = callback(req, this._paramMap);
+                this.app.post(path, async (req, res) => {
+                    const data = await callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
             case 'PUT':
-                this.app.put(path, (req, res) => {
-                    const data = callback(req, this._paramMap);
+                this.app.put(path, async (req, res) => {
+                    const data = await callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
 
             case 'DELETE':
-                this.app.delete(path, (req, res) => {
-                    const data = callback(req, this._paramMap);
+                this.app.delete(path, async (req, res) => {
+                    const data = await callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;
 
             case 'PATCH':
-                this.app.patch(path, (req, res) => {
-                    const data = callback(req, this._paramMap);
+                this.app.patch(path, async (req, res) => {
+                    const data = await callback(req, this._paramMap);
                     res.status(data.statusCode).send(data.message);
                 });
                 break;

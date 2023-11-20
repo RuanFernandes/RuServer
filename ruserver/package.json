@@ -1,6 +1,6 @@
 {
     "name": "ruserver",
-    "version": "1.2.5",
+    "version": "1.2.6",
     "description": "Biblioteca feita com o express para criar um servidor de forma mais simples e rápida, com suporte a decorators e controllers.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
