@@ -27,7 +27,12 @@ export default class Logger {
     private prefix: string = 'RuServer';
     private logLevel: LogLevel[] = [LogLevel.ERROR];
 
-    constructor(prefix: string = 'RuServer', logLevel?: LogLevel[]) {}
+    constructor(prefix: string = 'RuServer', logLevel?: LogLevel[]) {
+        this.prefix = prefix;
+        if (logLevel) {
+            this.logLevel = logLevel;
+        }
+    }
 
     public error(message: string): void {
         if (this.logLevel.includes(LogLevel.ERROR)) {
